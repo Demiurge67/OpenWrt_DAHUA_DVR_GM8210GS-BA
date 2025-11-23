@@ -1,0 +1,39 @@
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -490,6 +490,12 @@ config ARCH_OMAP1
+ 	help
+ 	  Support for older TI OMAP1 (omap7xx, omap15xx or omap16xx)
+ 
++config ARCH_GM8210
++	bool "Grain Media GM8210"
++	select CPU_ARM926EJ_S
++	help
++	  Support for Grain Media GM8210 SoC
++
+ endchoice
+ 
+ config ARCH_MULTIPLATFORM
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -163,6 +163,7 @@ machine-$(CONFIG_ARCH_ASPEED)           += aspeed
+ machine-$(CONFIG_ARCH_AT91)		+= at91
+ machine-$(CONFIG_ARCH_AXXIA)		+= axxia
+ machine-$(CONFIG_ARCH_BCM)		+= bcm
++machine-$(CONFIG_ARCH_GM8210)		+= grainmedia
+ machine-$(CONFIG_ARCH_BERLIN)		+= berlin
+ machine-$(CONFIG_ARCH_CLPS711X)		+= clps711x
+ machine-$(CONFIG_ARCH_CNS3XXX)		+= cns3xxx
+--- /dev/null
++++ b/arch/arm/mach-grainmedia/gm8210.c
+@@ -0,0 +1,9 @@
++#include <asm/mach/arch.h>
++
++static const char *const gm8210_dt_compat[] = {
++       "dahua,gm8210gs-ba",
++	"faraday,gm8210",
++	NULL,
++};
++
++DT_MACHINE_START(GM8210_DT, "Grain Media GM8210")
++	.dt_compat = gm8210_dt_compat,
++MACHINE_END

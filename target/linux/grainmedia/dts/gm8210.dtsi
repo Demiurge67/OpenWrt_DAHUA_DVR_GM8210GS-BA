@@ -1,0 +1,90 @@
+// SPDX-License-Identifier: GPL-2.0
+/dts-v1/;
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+
+/ {
+    compatible = "faraday,gm8210";
+    #address-cells = <1>;
+    #size-cells = <1>;
+
+    chosen { };
+    
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        
+        cpu@0 {
+            device_type = "cpu";
+            compatible = "arm,arm926ej-s";
+            reg = <0>;
+            clocks = <&cpu_clk>;
+            clock-frequency = <1200000000>;
+        };
+    };
+
+    clocks {
+        apb_clk: apb-clk {
+            compatible = "fixed-clock";
+            #clock-cells = <0>;
+            clock-frequency = <33000000>;
+        };
+    };
+    
+    cpu_clk: cpu-clk {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <1200000000>;
+    };
+
+    soc {
+        compatible = "simple-bus";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+
+        intc: interrupt-controller@80301000 {
+            compatible = "faraday,ftintc030";
+            interrupt-controller;
+            #interrupt-cells = <1>;
+            reg = <0x80301000 0x1000>;
+        };
+
+        uart0: serial@80400000 {
+            compatible = "faraday,ftuart010";
+            reg = <0x80400000 0x1000>;
+            interrupts = <8>;
+            interrupt-parent = <&intc>;
+            clocks = <&apb_clk>;
+            status = "disabled";
+        };
+
+        eth0: ethernet@80500000 {
+            compatible = "faraday,ftgmac100";
+            reg = <0x80500000 0x1000>;
+            interrupts = <33>;
+            interrupt-parent = <&intc>;
+            clocks = <&apb_clk>;
+            phy-mode = "mii";
+            status = "disabled";
+        };
+
+        spi0: spi@80600000 {
+            compatible = "faraday,ftspi020";
+            reg = <0x80600000 0x1000>;
+            interrupts = <6>;
+            interrupt-parent = <&intc>;
+            clocks = <&apb_clk>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "disabled";
+        };
+        
+        watchdog: watchdog@80300000 {
+            compatible = "faraday,ftwdt010";
+            reg = <0x80300000 0x1000>;
+            clocks = <&apb_clk>;
+            status = "disabled";
+        };
+    };
+};

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. /lib/functions/uci-defaults.sh
+. /lib/functions/system.sh
+
+board_config_update
+
+case "$(board_name)" in
+dahua,gm8210gs-ba)
+    uci set system.@system[0].hostname='GM8210GS-BA'
+    uci commit system
+    ;;
+esac
+
+exit 0
